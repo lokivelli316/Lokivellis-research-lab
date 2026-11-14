@@ -1,0 +1,1000 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05070b" />
+  <meta name="description" content="THROAT — an interactive physics and science research observatory with reversible black-hole transit, solar-system navigation, report lineage, and adversarial audit lanes." />
+  <title>THROAT // Physics & Science Research Observatory</title>
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #05070b;
+  --panel: rgba(9, 14, 22, 0.74);
+  --panel-strong: rgba(5, 9, 16, 0.92);
+  --text: #eef4ff;
+  --muted: #9fb0c8;
+  --line: rgba(173, 205, 255, 0.2);
+  --accent: #72e7ff;
+  --accent2: #d3ff7a;
+  --danger: #ff8e9c;
+  --warn: #ffc66d;
+  --shadow: 0 18px 60px rgba(0, 0, 0, 0.42);
+  --radius: 18px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); color: var(--text); }
+button, input, select, a { font: inherit; }
+button, a, input, select { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app-shell { position: relative; width: 100%; height: 100%; min-height: 100dvh; overflow: hidden; background: #020308; }
+#universe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.scanlines { position: absolute; inset: 0; pointer-events: none; opacity: .17; background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(255,255,255,.025) 4px); mix-blend-mode: screen; }
+.glass { background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(18px) saturate(120%); -webkit-backdrop-filter: blur(18px) saturate(120%); }
+.topbar { position: absolute; top: max(10px, env(safe-area-inset-top)); left: 12px; right: 12px; z-index: 20; min-height: 58px; border-radius: 16px; padding: 8px; display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; align-items: center; }
+.brand-block { min-width: 0; display: grid; gap: 1px; }
+.brand-block strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .05em; font-size: .92rem; }
+.eyebrow { display: block; color: var(--muted); font-size: .65rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; }
+.control, .icon-button, .chip, .stage-buttons button, .planet-buttons button { border: 1px solid var(--line); color: var(--text); background: rgba(15, 22, 34, .78); cursor: pointer; border-radius: 12px; min-height: 42px; padding: 0 12px; font-weight: 800; letter-spacing: .04em; }
+.control:hover, .icon-button:hover, .chip:hover, .stage-buttons button:hover, .planet-buttons button:hover { border-color: rgba(114,231,255,.6); background: rgba(24,35,53,.9); }
+.control.strong { color: #061017; background: linear-gradient(135deg, var(--accent), #a8f5ff); border-color: transparent; }
+.control.compact { min-height: 34px; font-size: .72rem; }
+.icon-button { width: 42px; padding: 0; font-size: 1.4rem; }
+.status-cluster { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.badge, .status-pill { display: inline-flex; align-items: center; min-height: 28px; border-radius: 999px; padding: 4px 9px; border: 1px solid var(--line); color: var(--muted); background: rgba(0,0,0,.28); font-size: .62rem; font-weight: 900; letter-spacing: .09em; text-transform: uppercase; }
+.badge.accent { color: var(--accent2); border-color: rgba(211,255,122,.35); }
+.library { position: absolute; z-index: 18; top: 82px; left: 12px; bottom: 130px; width: min(360px, calc(100vw - 24px)); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 12px; transform: translateX(calc(-100% - 30px)); transition: transform .28s ease; }
+.library.open { transform: translateX(0); }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.panel-head h1, .panel-head h3, .hud-title-row h2 { margin: 2px 0 0; line-height: 1.05; }
+.search-box { display: grid; gap: 5px; color: var(--muted); font-size: .72rem; font-weight: 700; }
+.search-box input, select { width: 100%; min-height: 44px; border: 1px solid var(--line); border-radius: 12px; background: rgba(0,0,0,.28); color: var(--text); padding: 0 12px; }
+.filter-row { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.chip { min-height: 34px; padding: 0 10px; white-space: nowrap; font-size: .66rem; }
+.chip.active { color: #061017; background: var(--accent); border-color: transparent; }
+.theory-list { min-height: 0; overflow-y: auto; display: grid; gap: 7px; padding-right: 3px; }
+.theory-item { border: 1px solid transparent; background: rgba(255,255,255,.035); border-radius: 12px; padding: 10px; cursor: pointer; display: grid; gap: 5px; }
+.theory-item:hover, .theory-item.selected { border-color: var(--line); background: rgba(114,231,255,.08); }
+.theory-item strong { font-size: .85rem; line-height: 1.2; }
+.theory-item p { margin: 0; color: var(--muted); font-size: .72rem; line-height: 1.35; }
+.theory-item .mini-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.mini-tag { border-radius: 999px; border: 1px solid var(--line); padding: 2px 6px; color: var(--muted); font-size: .58rem; text-transform: uppercase; letter-spacing: .08em; }
+.research-hud { position: absolute; z-index: 14; top: 82px; right: 12px; width: min(520px, calc(100vw - 396px)); max-height: calc(100vh - 230px); overflow-y: auto; border-radius: var(--radius); padding: 15px; }
+.hud-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.hud-title-row h2 { font-size: 1.25rem; }
+.status-pill { color: var(--warn); border-color: rgba(255,198,109,.38); flex: 0 0 auto; max-width: 46%; text-align: center; justify-content: center; }
+.summary { color: #d9e4f3; line-height: 1.48; margin: 12px 0; font-size: .88rem; }
+.boundary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.boundary-card { border: 1px solid var(--line); border-radius: 13px; padding: 10px; background: rgba(0,0,0,.2); }
+.boundary-card.danger { border-color: rgba(255,142,156,.28); }
+.boundary-card p, .boundary-card ul { margin: 7px 0 0; color: var(--muted); font-size: .76rem; line-height: 1.42; }
+.boundary-card ul { padding-left: 18px; }
+.report-stack { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; }
+.report-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: end; }
+.report-controls label { display: grid; gap: 5px; }
+.link-control { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
+.report-note { margin: 8px 0 0; color: var(--muted); font-size: .74rem; line-height: 1.35; }
+.confidence-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.confidence-token { border: 1px solid var(--line); border-radius: 999px; padding: 4px 8px; color: var(--muted); background: rgba(0,0,0,.2); font-size: .62rem; font-weight: 800; }
+.transit-deck { position: absolute; z-index: 16; left: 50%; transform: translateX(-50%); bottom: max(12px, env(safe-area-inset-bottom)); width: min(760px, calc(100vw - 24px)); border-radius: var(--radius); padding: 11px 13px; }
+.transit-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.transit-head strong { font-size: .78rem; letter-spacing: .04em; }
+.travel-slider, .solar-controls input[type="range"] { width: 100%; accent-color: var(--accent); }
+.travel-slider { margin: 8px 0 3px; }
+.stage-buttons { display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px; }
+.stage-buttons button { min-height: 32px; padding: 0 6px; font-size: .58rem; }
+.solar-controls { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 8px; align-items: end; }
+.solar-controls label { min-width: 0; color: var(--muted); font-size: .68rem; display: grid; gap: 4px; }
+.switch-label { grid-template-columns: auto 1fr; align-items: center; border: 1px solid var(--line); border-radius: 11px; padding: 7px 9px; min-height: 38px; }
+.switch-label input { accent-color: var(--accent); }
+.interaction-hint { margin: 6px 0 0; text-align: center; color: var(--muted); font-size: .62rem; }
+.orbital-panel { position: absolute; z-index: 13; left: 12px; bottom: 130px; width: 360px; max-width: calc(100vw - 24px); border-radius: var(--radius); padding: 12px; opacity: .18; pointer-events: none; transition: opacity .25s ease; }
+.orbital-panel.active { opacity: 1; pointer-events: auto; }
+.compact-head h3 { margin: 2px 0 0; }
+.microcopy { color: var(--muted); font-size: .62rem; }
+.planet-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-top: 9px; }
+.planet-buttons button { min-height: 32px; font-size: .58rem; padding: 0 5px; }
+.planet-buttons button.selected { border-color: var(--accent); color: var(--accent); }
+.planet-readout { display: grid; gap: 2px; margin-top: 9px; }
+.planet-readout strong { letter-spacing: .08em; font-size: .82rem; }
+.planet-readout span { color: var(--muted); font-size: .68rem; }
+.galactic-map { display: grid; gap: 2px; margin-top: 8px; color: var(--accent); }
+.galactic-map svg { width: 100%; height: 112px; overflow: visible; }
+.galaxy-halo { fill: rgba(114,231,255,.04); stroke: rgba(114,231,255,.12); }
+.galaxy-orbit { fill: none; stroke: rgba(211,255,122,.45); stroke-dasharray: 4 5; }
+.galaxy-core { fill: url(#coreGlow); }
+.solar-marker { fill: var(--accent2); filter: drop-shadow(0 0 6px var(--accent2)); }
+.galactic-map text { fill: var(--muted); font-size: 9px; letter-spacing: .08em; }
+.epistemic-boundary { position: absolute; z-index: 22; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(.96); width: min(640px, calc(100vw - 34px)); border: 1px solid rgba(255,198,109,.6); background: rgba(26, 15, 7, .92); color: #ffe2b3; border-radius: 16px; padding: 14px 16px; display: grid; gap: 4px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .22s ease, transform .22s ease; text-align: center; }
+.epistemic-boundary.visible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.epistemic-boundary strong { letter-spacing: .12em; font-size: .74rem; }
+.epistemic-boundary span { color: #f5c98b; font-size: .75rem; line-height: 1.38; }
+.fallback-message { position: absolute; z-index: 30; left: 50%; top: 50%; transform: translate(-50%,-50%); padding: 18px; border-radius: 16px; width: min(440px, calc(100vw - 30px)); display: grid; gap: 6px; text-align: center; }
+.fallback-message span { color: var(--muted); font-size: .8rem; }
+
+@media (max-width: 1050px) {
+  .research-hud { left: 12px; right: 12px; top: auto; bottom: 250px; width: auto; max-height: 36vh; }
+  .library { bottom: 250px; }
+  .orbital-panel { right: 12px; left: auto; bottom: 250px; width: 340px; }
+}
+@media (max-width: 760px) {
+  .topbar { grid-template-columns: auto 1fr auto; }
+  .topbar .status-cluster { display: none; }
+  #motionToggle { display: none; }
+  .brand-block .eyebrow { display: none; }
+  .brand-block strong { font-size: .72rem; }
+  .library { top: 78px; bottom: 188px; width: calc(100vw - 24px); }
+  .research-hud { top: 78px; bottom: 188px; max-height: none; left: 12px; right: 12px; width: auto; transform: translateY(calc(100% + 210px)); transition: transform .28s ease; }
+  .research-hud.mobile-visible { transform: translateY(0); }
+  .boundary-grid { grid-template-columns: 1fr; }
+  .hud-title-row { display: grid; }
+  .status-pill { max-width: 100%; justify-self: start; }
+  .transit-deck { padding: 9px; }
+  .stage-buttons { grid-template-columns: repeat(3, 1fr); }
+  .solar-controls { grid-template-columns: 1fr 1fr; }
+  .orbital-panel { left: 12px; right: 12px; bottom: 188px; width: auto; max-height: 42vh; overflow-y: auto; }
+  .planet-buttons { grid-template-columns: repeat(4, 1fr); }
+  .galactic-map svg { height: 86px; }
+  .report-controls { grid-template-columns: 1fr; }
+  .link-control { min-height: 42px; }
+}
+@media (max-width: 420px) {
+  .topbar { left: 8px; right: 8px; }
+  .library, .research-hud, .orbital-panel { left: 8px; right: 8px; width: auto; }
+  .brand-block strong { max-width: 130px; }
+  .control.strong { padding: 0 9px; font-size: .67rem; }
+  .transit-head .eyebrow { display: none; }
+  .transit-head strong { font-size: .7rem; }
+  .interaction-hint { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+</style>
+</head>
+<body>
+  <main id="app" class="app-shell" aria-label="THROAT research observatory">
+    <canvas id="universe" aria-label="Interactive black-hole throat and solar-system visualization"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <header class="topbar glass">
+      <button id="libraryToggle" class="control strong" type="button" aria-expanded="true" aria-controls="libraryPanel">☰ RESEARCH VAULT</button>
+      <div class="brand-block" aria-label="Application title">
+        <span class="eyebrow">LOKIVELLI RESEARCH OBSERVATORY</span>
+        <strong>THROAT // ONE-WINDOW UNIVERSE</strong>
+      </div>
+      <div class="status-cluster" aria-live="polite">
+        <span id="runtimeBadge" class="badge">WEBGL2 CHECKING</span>
+        <span id="stageBadge" class="badge accent">EXTERIOR</span>
+      </div>
+      <button id="motionToggle" class="control" type="button">PAUSE MOTION</button>
+    </header>
+
+    <aside id="libraryPanel" class="library glass open" aria-label="Research library">
+      <div class="panel-head">
+        <div>
+          <span class="eyebrow">THEORY / TOOL / EXPERIMENT</span>
+          <h1>Research Vault</h1>
+        </div>
+        <button id="libraryClose" class="icon-button" type="button" aria-label="Close research library">×</button>
+      </div>
+      <label class="search-box">
+        <span>Filter research</span>
+        <input id="researchSearch" type="search" placeholder="SME, CUT, hematocrit, forbidden…" autocomplete="off" />
+      </label>
+      <div class="filter-row" role="group" aria-label="Research status filter">
+        <button class="chip active" type="button" data-filter="all">ALL</button>
+        <button class="chip" type="button" data-filter="model">MODELS</button>
+        <button class="chip" type="button" data-filter="audit">AUDITS</button>
+        <button class="chip" type="button" data-filter="experiment">EXPERIMENTS</button>
+        <button class="chip" type="button" data-filter="instrument">INSTRUMENTS</button>
+      </div>
+      <div id="theoryList" class="theory-list" role="listbox" aria-label="Research entries"></div>
+    </aside>
+
+    <section id="researchHud" class="research-hud glass" aria-live="polite">
+      <div class="hud-title-row">
+        <div>
+          <span id="theoryKind" class="eyebrow">INSTRUMENT</span>
+          <h2 id="theoryTitle">GARGANTUA / THROAT TRANSIT</h2>
+        </div>
+        <span id="theoryStatus" class="status-pill">IMPLEMENTED + SPECULATIVE BOUNDARY</span>
+      </div>
+      <p id="theorySummary" class="summary"></p>
+      <div class="boundary-grid">
+        <div class="boundary-card">
+          <span class="eyebrow">CLAIM BOUNDARY</span>
+          <p id="claimBoundary"></p>
+        </div>
+        <div class="boundary-card danger">
+          <span class="eyebrow">THROW THE WALL AT IT</span>
+          <ul id="challengeList"></ul>
+        </div>
+      </div>
+      <div class="report-stack">
+        <div class="report-controls">
+          <label>
+            <span class="eyebrow">REPORT / BRANCH / EVIDENCE</span>
+            <select id="reportSelect"></select>
+          </label>
+          <a id="openReport" class="control strong link-control" href="#" target="_blank" rel="noopener">OPEN SOURCE ↗</a>
+        </div>
+        <p id="reportNote" class="report-note"></p>
+      </div>
+      <div id="confidenceRow" class="confidence-row"></div>
+    </section>
+
+    <section class="transit-deck glass" aria-label="Transit controls">
+      <div class="transit-head">
+        <div>
+          <span class="eyebrow">REVERSIBLE STATE COORDINATE</span>
+          <strong id="transitLabel">0.000 — Schwarzschild exterior</strong>
+        </div>
+        <button id="resetView" class="control compact" type="button">RESET VIEW</button>
+      </div>
+      <input id="travel" class="travel-slider" type="range" min="0" max="1000" step="1" value="0" aria-label="Transit from black-hole exterior through throat to solar system" />
+      <div class="stage-buttons" role="group" aria-label="Transit stage shortcuts">
+        <button type="button" data-travel="0">EXTERIOR</button>
+        <button type="button" data-travel="390">STRONG FIELD</button>
+        <button type="button" data-travel="500">BOUNDARY</button>
+        <button type="button" data-travel="690">THROAT</button>
+        <button type="button" data-travel="845">PHOTOSPHERE</button>
+        <button type="button" data-travel="1000">SYSTEM</button>
+      </div>
+      <div class="solar-controls">
+        <label>
+          <span>Orbital time</span>
+          <input id="orbitTime" type="range" min="0" max="1000" step="1" value="220" />
+        </label>
+        <label>
+          <span>System scale</span>
+          <input id="systemScale" type="range" min="60" max="160" step="1" value="100" />
+        </label>
+        <label class="switch-label">
+          <input id="showOrbits" type="checkbox" checked />
+          <span>Planet orbits</span>
+        </label>
+        <label class="switch-label">
+          <input id="showGalactic" type="checkbox" checked />
+          <span>Solar galactic orbit</span>
+        </label>
+      </div>
+      <p class="interaction-hint">Drag the universe to rotate the view. Use ←/→ to traverse. Space pauses motion.</p>
+    </section>
+
+    <section id="orbitalPanel" class="orbital-panel glass" aria-label="Solar system navigator">
+      <div class="panel-head compact-head">
+        <div>
+          <span class="eyebrow">DESTINATION SYSTEM</span>
+          <h3>Orbit Inspector</h3>
+        </div>
+        <span class="microcopy">log-scaled / schematic</span>
+      </div>
+      <div id="planetButtons" class="planet-buttons" role="group" aria-label="Select planet"></div>
+      <div class="planet-readout">
+        <strong id="planetName">SOLAR SYSTEM</strong>
+        <span id="planetMeta">Select a planet to focus it.</span>
+      </div>
+      <div id="galacticMap" class="galactic-map" aria-label="Schematic solar orbit around the Milky Way">
+        <svg viewBox="0 0 320 180" role="img" aria-labelledby="galacticTitle galacticDesc">
+          <title id="galacticTitle">Schematic solar galactic orbit</title>
+          <desc id="galacticDesc">A not-to-scale view of the Solar System orbiting the Milky Way center.</desc>
+          <defs>
+            <radialGradient id="coreGlow">
+              <stop offset="0" stop-color="currentColor" stop-opacity="0.9" />
+              <stop offset="1" stop-color="currentColor" stop-opacity="0" />
+            </radialGradient>
+          </defs>
+          <ellipse class="galaxy-halo" cx="160" cy="90" rx="120" ry="54" />
+          <ellipse class="galaxy-orbit" cx="160" cy="90" rx="88" ry="38" />
+          <circle class="galaxy-core" cx="160" cy="90" r="20" />
+          <circle id="solarMarker" class="solar-marker" cx="248" cy="90" r="5" />
+          <text x="160" y="94" text-anchor="middle">MW CORE</text>
+          <text x="248" y="78" text-anchor="middle">SUN</text>
+        </svg>
+        <span class="microcopy">~230 Myr galactic year [approximate]</span>
+      </div>
+    </section>
+
+    <div id="epistemicBoundary" class="epistemic-boundary" role="status" aria-live="polite">
+      <strong>PHYSICAL / SPECULATIVE BOUNDARY</strong>
+      <span>Classical Schwarzschild exterior ends here. Reversible post-horizon transit is a labeled manifold visualization, not established GR.</span>
+    </div>
+
+    <div id="fallbackMessage" class="fallback-message glass" hidden>
+      <strong>WebGL2 is unavailable on this device/browser.</strong>
+      <span>The research vault remains usable, but the throat renderer is running in fallback mode.</span>
+    </div>
+  </main>
+
+  <script>
+window.RESEARCH_DATA = [
+  {
+    id: "gargantua",
+    title: "GARGANTUA / THROAT TRANSIT",
+    short: "Schwarzschild renderer + reversible throat transit architecture",
+    kind: "instrument",
+    status: "Implemented substrate + labeled speculative transit",
+    confidence: ["HIGH: lineage + release architecture", "MEDIUM: this prototype renderer", "UNKNOWN: traversable post-horizon physics"],
+    summary: "A scientific-visualization lineage built around Schwarzschild null-geodesic rendering, donor comparison, packaging discipline, and the later chef's-kiss reversible transit: black-hole exterior → epistemic boundary → three-fold manifold corridor → stellar breakthrough → navigable solar system.",
+    boundary: "Exterior/strong-field behavior is grounded in the Schwarzschild rendering program. A reversible black-hole-to-Sun transit is not standard classical GR; the corridor is deliberately labeled as a speculative manifold visualization.",
+    challenges: [
+      "Do not let visual plausibility become a claim that the metric is solved.",
+      "Full multi-crossing disk and GPU verification remain separate gates from a pretty render.",
+      "Old Kimi and ChatGPT branches must stay traceable; no winner-take-all rewrite.",
+      "A post-horizon return path needs a validated traversable metric before it can move out of the speculative lane."
+    ],
+    reports: [
+      { name: "CHEF'S KISS skill source dossier v1.1", note: "Canonical build/hybridization + bidirectional transit pattern and acceptance tests.", url: "https://docs.google.com/document/d/1BXUCHtOuLkpnP_c1lZ-6Sunk2XsCR8Iq/edit" },
+      { name: "Complete progression transcript + project purpose", note: "Preserves the old build, Kimi donor audit, hybrid rebuild, failures, and transit design lineage.", url: "https://docs.google.com/document/d/1GzAbIc7iNFKWfE6YT-jFwYrVFcVsoMKO/edit" },
+      { name: "Kimi Agent — GARGANTUA donor ZIP", note: "Older donor branch retained as evidence rather than overwritten.", url: "https://drive.google.com/file/d/1nCV09IPZs4_83FENSkc2KsPxU8fvBikD/view" },
+      { name: "GARGANTUA v1 initial", note: "Initial ChatGPT branch before donor-driven repair.", url: "https://drive.google.com/file/d/1CR8mTmFxhzaUU3JOWLqWyllttCQRA75C/view" },
+      { name: "GARGANTUA v2 hybrid", note: "Hybrid runtime/release shell + stronger RK4/provenance discipline.", url: "https://drive.google.com/file/d/1U82yg9Y9th1d59eLiNvWzmpVn8MdbrMv/view" },
+      { name: "GARGANTUA v3 CHEF'S KISS", note: "Latest archived Schwarzschild raytracer branch in the supplied folder.", url: "https://drive.google.com/file/d/1Iv5prg0UFNmzyI3GLzUPPD7euiCKNpAM/view" },
+      { name: "Scientific WebGL skill dossier v1.0", note: "Earlier skill-source snapshot kept for comparison.", url: "https://docs.google.com/document/d/16-NOX8IQb6VA_5-oSn5L59kLkndd0GJ5/edit" }
+    ]
+  },
+  {
+    id: "sme",
+    title: "SME–MOND v12.3 Fork B",
+    short: "Fork-B cleaves, MOND/Weyl branch, auditor-candidate lineage",
+    kind: "model",
+    status: "Experimental theory branch / auditor candidate",
+    confidence: ["HIGH: source lineage", "MEDIUM: internal branch conclusions", "OPEN: projection/matching quantities"],
+    summary: "A deliberately forked research branch exploring whether MOND/Weyl-sector results survive independently of trunk assumptions. The branch is preserved as a separate line rather than silently rewritten into the base model.",
+    boundary: "Treat SME quantities as experimental theory provenance. Do not silently inject open SME parameters into standard Schwarzschild GR or other established equations without a derivation.",
+    challenges: [
+      "Keep the Fork-B kill criteria visible instead of optimizing them away.",
+      "Open projection/matching factors stay open until calculated with discriminating precision.",
+      "Counterexamples and cleave failures remain part of the report family.",
+      "Cross-model agreement is not empirical confirmation."
+    ],
+    reports: [
+      { name: "Third Cleave Auditor Candidate v0.9.1", note: "Current markdown auditor-candidate branch found in Drive.", url: "https://drive.google.com/file/d/1OvV5k62-1opC4PvKUScqcBpx6sXluG9y/view" },
+      { name: "Second Cleave Pass", note: "Earlier Fork-B cleave retained for lineage and comparison.", url: "https://drive.google.com/file/d/103QAcF-0fQPIZTZITcshwVESb9_PHAM-/view" }
+    ]
+  },
+  {
+    id: "cut",
+    title: "CUT v2.2",
+    short: "Consolidated theory map with unresolved matching quantities",
+    kind: "model",
+    status: "Map / open theory quantities",
+    confidence: ["HIGH: map provenance", "OPEN: kappa matching", "NOT PROOF: mapping alone"],
+    summary: "CUT is carried as a consolidated theory map: a structured bridge between quantities and candidate correspondences, with explicit warnings against treating the map itself as proof.",
+    boundary: "The map is not a solved physical derivation. Unresolved matching coefficients remain unresolved and cannot be promoted into fixed constants just because a visualization needs a number.",
+    challenges: [
+      "Compute the matching coefficient rather than selecting an attractive value.",
+      "Separate correspondence, analogy, derivation, and empirical prediction.",
+      "Keep SME/CUT boundaries visible when models share symbols or motifs.",
+      "A map that organizes research can still be physically wrong."
+    ],
+    reports: [
+      { name: "CUT v2.2 Full Map Consolidated", note: "Current consolidated markdown map located in Drive.", url: "https://drive.google.com/file/d/1bmI3R-mpxi2ZcycPBgiSxX_OvUlWXVky/view" },
+      { name: "CUT v0.4.1 Audit and Master", note: "Older audit/master branch retained as lineage evidence.", url: "https://drive.google.com/file/d/15OSNfgDAEnS4o_duXOePu74WDI0_2Yab/view" }
+    ]
+  },
+  {
+    id: "pmae",
+    title: "PMAE / Parameter Miscount Hypothesis",
+    short: "Meta-tool for missing, fused, split, or frozen parameters",
+    kind: "audit",
+    status: "Meta-research engine / hypothesis generator",
+    confidence: ["HIGH: audit framing", "MEDIUM: algorithmic usefulness", "LOW: any specific new-physics implication"],
+    summary: "The Parameter Miscount Audit Engine reframes first principles as parameter-count hypotheses: missing variables, wrongfully fused identities, artificial separations, and constants that may really be dynamical fields. It is explicitly a meta-tool, not a completed physical theory.",
+    boundary: "Residual structure can motivate a missing-parameter search; it does not by itself establish that a new degree of freedom exists. Expanded models must pay complexity penalties and survive independent data.",
+    challenges: [
+      "Autoencoder latent dimensions can model artifacts, systematics, or dataset leakage.",
+      "Split-parameter fits must beat simpler models under out-of-sample tests, not just training likelihood.",
+      "Cross-domain correlations need preregistered controls against p-hacking and shared systematics.",
+      "Do not turn unexplained residuals directly into ontology."
+    ],
+    reports: [
+      { name: "Hypothetical Parameter Problem / PMAE tool spec", note: "Long-form report plus PMAE architecture and module definitions.", url: "https://drive.google.com/file/d/16L3bRYcj9Z10TS7o-f64FxFeeuGHmVf1/view" },
+      { name: "Missing Parameter Hypothesis", note: "Earlier report retained as a distinct branch.", url: "https://drive.google.com/file/d/1ek3bQ9afJe5XAbQ_KybKTcvfj4bmCHFM/view" },
+      { name: "Miscounted Parameter Hypothesis", note: "Separate miscount framing preserved rather than merged away.", url: "https://drive.google.com/file/d/1J1maonEmgQVyfYgyV4GgRL1tUjdp-s1o/view" },
+      { name: "The Parameter Miscount", note: "Large-format parameter-miscount artifact in the research corpus.", url: "https://drive.google.com/file/d/1n2ycRd1g5NsKMXs9L9dhZ08zpfKEu9CB/view" }
+    ]
+  },
+  {
+    id: "hematocrit",
+    title: "Schrödinger’s Hematocrit",
+    short: "Dynamic blood microstructure across acceleration regimes",
+    kind: "experiment",
+    status: "Early-stage instrumented question",
+    confidence: ["HIGH: conventional fluid-dynamics experiment", "MEDIUM: coarse-graining value", "LOW: emergent-gravity connection"],
+    summary: "An early-stage research concept asking what continuously flowing blood does when support acceleration, gravitational environment, and acceleration gradients are experimentally separated while microscopic structure is measured in real time.",
+    boundary: "The immediate experiment is hemorheology. Any anomaly must first lose to ordinary explanations — shear, pressure, temperature, buoyancy, sedimentation, geometry, chemistry, vibration, bubbles — before a new gravitational-response mechanism is entertained.",
+    challenges: [
+      "Conventional microgravity blood physics must win first.",
+      "Derive the microscopic coupling before using data to retrofit an emergent-gravity story.",
+      "Control support acceleration separately from field strength and acceleration gradient.",
+      "A null result is useful and should not be reinterpreted into success."
+    ],
+    reports: [
+      { name: "Early Research Concept v0.1", note: "Primary markdown research note; explicitly calls itself an instrumented question, not a claimed answer.", url: "https://drive.google.com/file/d/1_InTtQsil5tGLqA8v4A0pJAKdGLWLs3Z/view" },
+      { name: "Convergent Universe Blueprint", note: "Presentation branch retained in the pinned research folder.", url: "https://docs.google.com/presentation/d/13dZhesjB_W1SSDotM4uGn-r97BQp5zjc/edit" },
+      { name: "Scalar Lens", note: "Presentation artifact from the same pinned research family.", url: "https://docs.google.com/presentation/d/1EbWozFWWDY1j6nN026AGwLTad68Hbjre/edit" },
+      { name: "Testing the fractal universe with spinning blood", note: "Audio research artifact retained as provenance rather than converted into a claim.", url: "https://drive.google.com/file/d/10k_ZFkVHvYTAhM2EY91r9mhLdzaBPKeH/view" }
+    ]
+  },
+  {
+    id: "forbidden",
+    title: "Forbidden-Action Atlas",
+    short: "Multi-model adversarial audit of extreme-physics claims",
+    kind: "audit",
+    status: "Variance audit / research-readiness scoring",
+    confidence: ["HIGH: variance bookkeeping", "MEDIUM: tier interpretation", "NO: consensus ≠ physical viability"],
+    summary: "A deliberately adversarial multi-model audit that compares research-readiness tiers for extreme or 'forbidden' physics claims, preserves disagreements, detects scope collisions, and flags contradictions between narrative summaries and row-level classifications.",
+    boundary: "Consensus here measures agreement about research readiness, not whether the literal forbidden action is physically viable. Strong agreement can still converge on a bad premise.",
+    challenges: [
+      "Narrative kill counts conflict with row-level tiers in several model outputs.",
+      "White-hole literal and white-hole-mimic claims must not be merged without scope review.",
+      "Neutrino-optics research-worthy null tests can be confused with literal viability.",
+      "Outlier models should remain visible instead of being averaged into false certainty."
+    ],
+    reports: [
+      { name: "Multi-Model Variance Audit v2", note: "Exact-claim consensus, scope collisions, consistency checks, and outlier flags.", url: "https://drive.google.com/file/d/1LSupyt0UhRthMaXDB2y3t55jNl7T1FBd/view" },
+      { name: "The Forbidden-Action Atlas PDF", note: "Atlas publication artifact.", url: "https://drive.google.com/file/d/1PkUudt37CUsqLupkSiuSF7ahOR7-BDup/view" },
+      { name: "The Forbidden Action Atlas presentation", note: "Presentation branch preserved in the report family.", url: "https://docs.google.com/presentation/d/1F719bo9pjrNpTOYK5AIK6fS4hI3skkzh/edit" }
+    ]
+  },
+  {
+    id: "equivalence",
+    title: "Emergent Equivalence / Statistical Locking",
+    short: "Microscopic gradient response, coarse-graining, hypergravity branch",
+    kind: "model",
+    status: "Exploratory mechanism / experimental branch",
+    confidence: ["HIGH: falsifiable framing", "MEDIUM: experimental decomposition", "UNKNOWN: hidden state X and N_eff"],
+    summary: "A research branch exploring whether microscopic state-dependent deviations could statistically coarse-grain toward ordinary macroscopic equivalence, alongside experiments that separate field strength, support acceleration, and acceleration gradients.",
+    boundary: "The hidden state X and effective number of independent response modes N_eff remain unresolved. Statistical locking is a mechanism candidate, not established evidence for modified gravity.",
+    challenges: [
+      "Identify the actual microscopic state variable before claiming a physical mechanism.",
+      "Demonstrate that N_eff is not just a re-labeling of ordinary correlations.",
+      "Separate support acceleration from field and gradient in the experiment design.",
+      "Known many-body/statistical mechanics explanations get first refusal."
+    ],
+    reports: [
+      { name: "Emergent Equivalence — Microscopic Gradient Response v0.1", note: "Primary emergent-equivalence report located in Drive.", url: "https://drive.google.com/file/d/19guaXCzq18EEpYwRGUZugeRcWy9NsnAC/view" },
+      { name: "When Equivalence Is A Lock — sideways lab note", note: "Sideways exploration retained as a separate lab-note branch.", url: "https://drive.google.com/file/d/1BeiOvPmw0YvLvUcb1zLbEQa6xFMp8RdM/view" },
+      { name: "Field / Support / Gradient Hypergravity Closure", note: "Closure branch separating frequently conflated acceleration variables.", url: "https://drive.google.com/file/d/19Jr41qZjETDZ43Yhs8vSMcUFXTYyO6eS/view" },
+      { name: "Study Guide — Emergent Equivalence and Statistical Locking", note: "Spreadsheet study guide retained as a companion artifact.", url: "https://docs.google.com/spreadsheets/d/1Ha5Zw3mtdXKG5njpENW0FUw-1jtkJS7P8GSztWJv1Yw/edit" }
+    ]
+  },
+  {
+    id: "zero-assumption",
+    title: "Zero-Assumption Manual",
+    short: "Research-method discipline for attacking premises before conclusions",
+    kind: "audit",
+    status: "Methodology / adversarial research discipline",
+    confidence: ["HIGH: methodology value", "N/A: not a physical theory"],
+    summary: "A methodology branch used to force hidden assumptions, authority shortcuts, and premature closure into the open before they become load-bearing parts of a research argument.",
+    boundary: "This is a research discipline, not evidence for any underlying physical claim. It should make theories easier to kill, not harder to criticize.",
+    challenges: [
+      "Do not confuse skepticism with automatic contrarianism.",
+      "A zero-assumption pass still has to respect established measurements.",
+      "Preserve failed branches and corrections instead of rewriting history after the fact.",
+      "The method is successful when it kills your favorite idea as readily as someone else's."
+    ],
+    reports: [
+      { name: "Zero Assumption Manual — Forge Reader Zero Edition v0.1", note: "Methodology document found in the research corpus.", url: "https://docs.google.com/document/d/1OdVkAvSVsfieNRGdCkFkj7wLYWbPdyKP/edit" }
+    ]
+  }
+];
+
+window.PLANET_DATA = [
+  { name: "Mercury", au: 0.387, period: 0.241, class: "terrestrial" },
+  { name: "Venus", au: 0.723, period: 0.615, class: "terrestrial" },
+  { name: "Earth", au: 1.000, period: 1.000, class: "terrestrial" },
+  { name: "Mars", au: 1.524, period: 1.881, class: "terrestrial" },
+  { name: "Jupiter", au: 5.203, period: 11.862, class: "gas giant" },
+  { name: "Saturn", au: 9.537, period: 29.457, class: "gas giant" },
+  { name: "Uranus", au: 19.191, period: 84.017, class: "ice giant" },
+  { name: "Neptune", au: 30.069, period: 164.79, class: "ice giant" }
+];
+
+</script>
+  <script>
+(() => {
+  'use strict';
+
+  const qs = (s) => document.querySelector(s);
+  const qsa = (s) => Array.from(document.querySelectorAll(s));
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+  const canvas = qs('#universe');
+  const libraryPanel = qs('#libraryPanel');
+  const libraryToggle = qs('#libraryToggle');
+  const libraryClose = qs('#libraryClose');
+  const researchHud = qs('#researchHud');
+  const theoryList = qs('#theoryList');
+  const researchSearch = qs('#researchSearch');
+  const reportSelect = qs('#reportSelect');
+  const openReport = qs('#openReport');
+  const reportNote = qs('#reportNote');
+  const theoryTitle = qs('#theoryTitle');
+  const theoryKind = qs('#theoryKind');
+  const theoryStatus = qs('#theoryStatus');
+  const theorySummary = qs('#theorySummary');
+  const claimBoundary = qs('#claimBoundary');
+  const challengeList = qs('#challengeList');
+  const confidenceRow = qs('#confidenceRow');
+  const travel = qs('#travel');
+  const orbitTime = qs('#orbitTime');
+  const systemScale = qs('#systemScale');
+  const showOrbits = qs('#showOrbits');
+  const showGalactic = qs('#showGalactic');
+  const orbitPanel = qs('#orbitalPanel');
+  const motionToggle = qs('#motionToggle');
+  const resetView = qs('#resetView');
+  const runtimeBadge = qs('#runtimeBadge');
+  const stageBadge = qs('#stageBadge');
+  const transitLabel = qs('#transitLabel');
+  const boundaryNotice = qs('#epistemicBoundary');
+  const planetButtons = qs('#planetButtons');
+  const planetName = qs('#planetName');
+  const planetMeta = qs('#planetMeta');
+  const galacticMap = qs('#galacticMap');
+  const solarMarker = qs('#solarMarker');
+  const fallbackMessage = qs('#fallbackMessage');
+
+  const research = Array.isArray(window.RESEARCH_DATA) ? window.RESEARCH_DATA : [];
+  const planets = Array.isArray(window.PLANET_DATA) ? window.PLANET_DATA : [];
+
+  let activeTheory = 'gargantua';
+  let activeFilter = 'all';
+  let selectedPlanet = -1;
+  let isPaused = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches || false;
+  let pointerDown = false;
+  let lastPointer = { x: 0, y: 0 };
+  let viewYaw = 0.12;
+  let viewTilt = 0.74;
+  let focusAmount = 0;
+  let targetFocus = 0;
+  let lastBoundaryFlash = false;
+
+  const safeStorage = {
+    get(key) { try { return localStorage.getItem(key); } catch { return null; } },
+    set(key, value) { try { localStorage.setItem(key, value); } catch {} }
+  };
+
+  const savedTheory = safeStorage.get('throat.activeTheory');
+  if (savedTheory && research.some(r => r.id === savedTheory)) activeTheory = savedTheory;
+  const savedTravel = Number(safeStorage.get('throat.travel'));
+  if (Number.isFinite(savedTravel)) travel.value = String(clamp(savedTravel, 0, 1000));
+
+  function kindLabel(kind) {
+    return ({ model: 'EXPERIMENTAL MODEL', audit: 'AUDIT / META-TOOL', experiment: 'EXPERIMENT', instrument: 'INSTRUMENT / RENDERER' })[kind] || kind.toUpperCase();
+  }
+
+  function renderTheoryList() {
+    const query = researchSearch.value.trim().toLowerCase();
+    theoryList.innerHTML = '';
+    const visible = research.filter(item => {
+      const filterOK = activeFilter === 'all' || item.kind === activeFilter;
+      const queryOK = !query || [item.title, item.short, item.kind, item.status].join(' ').toLowerCase().includes(query);
+      return filterOK && queryOK;
+    });
+
+    for (const item of visible) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `theory-item${item.id === activeTheory ? ' selected' : ''}`;
+      button.setAttribute('role', 'option');
+      button.setAttribute('aria-selected', item.id === activeTheory ? 'true' : 'false');
+      button.dataset.id = item.id;
+      button.innerHTML = `
+        <span class="eyebrow">${kindLabel(item.kind)}</span>
+        <strong>${item.title}</strong>
+        <p>${item.short}</p>
+        <span class="mini-tags"><span class="mini-tag">${item.reports.length} report${item.reports.length === 1 ? '' : 's'}</span><span class="mini-tag">${item.status}</span></span>`;
+      button.addEventListener('click', () => {
+        selectTheory(item.id);
+        if (window.innerWidth <= 760) {
+          libraryPanel.classList.remove('open');
+          researchHud.classList.add('mobile-visible');
+        }
+      });
+      theoryList.appendChild(button);
+    }
+
+    if (!visible.length) {
+      const empty = document.createElement('div');
+      empty.className = 'theory-item';
+      empty.innerHTML = '<strong>No research matches that filter.</strong><p>Clear the search or switch categories.</p>';
+      theoryList.appendChild(empty);
+    }
+  }
+
+  function selectTheory(id) {
+    const item = research.find(r => r.id === id) || research[0];
+    if (!item) return;
+    activeTheory = item.id;
+    safeStorage.set('throat.activeTheory', item.id);
+    theoryKind.textContent = kindLabel(item.kind);
+    theoryTitle.textContent = item.title;
+    theoryStatus.textContent = item.status;
+    theorySummary.textContent = item.summary;
+    claimBoundary.textContent = item.boundary;
+    challengeList.innerHTML = item.challenges.map(c => `<li>${c}</li>`).join('');
+    confidenceRow.innerHTML = item.confidence.map(c => `<span class="confidence-token">${c}</span>`).join('');
+    reportSelect.innerHTML = '';
+    item.reports.forEach((report, index) => {
+      const option = document.createElement('option');
+      option.value = String(index);
+      option.textContent = report.name;
+      reportSelect.appendChild(option);
+    });
+    setActiveReport(0);
+    renderTheoryList();
+  }
+
+  function setActiveReport(index) {
+    const item = research.find(r => r.id === activeTheory);
+    if (!item || !item.reports.length) return;
+    const report = item.reports[clamp(index, 0, item.reports.length - 1)];
+    reportNote.textContent = report.note;
+    openReport.href = report.url;
+  }
+
+  reportSelect.addEventListener('change', () => setActiveReport(Number(reportSelect.value)));
+  researchSearch.addEventListener('input', renderTheoryList);
+  qsa('[data-filter]').forEach(button => button.addEventListener('click', () => {
+    activeFilter = button.dataset.filter;
+    qsa('[data-filter]').forEach(b => b.classList.toggle('active', b === button));
+    renderTheoryList();
+  }));
+
+  libraryToggle.addEventListener('click', () => {
+    const willOpen = !libraryPanel.classList.contains('open');
+    libraryPanel.classList.toggle('open', willOpen);
+    libraryToggle.setAttribute('aria-expanded', String(willOpen));
+    if (window.innerWidth <= 760 && willOpen) researchHud.classList.remove('mobile-visible');
+  });
+  libraryClose.addEventListener('click', () => {
+    libraryPanel.classList.remove('open');
+    libraryToggle.setAttribute('aria-expanded', 'false');
+  });
+
+  function renderPlanetButtons() {
+    planetButtons.innerHTML = '';
+    planets.forEach((planet, index) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = planet.name.toUpperCase();
+      button.addEventListener('click', () => {
+        if (Number(travel.value) < 900) travel.value = '1000';
+        selectedPlanet = index;
+        targetFocus = 1;
+        updatePlanetReadout();
+        renderPlanetButtons();
+      });
+      button.classList.toggle('selected', selectedPlanet === index);
+      planetButtons.appendChild(button);
+    });
+  }
+
+  function updatePlanetReadout() {
+    if (selectedPlanet < 0 || !planets[selectedPlanet]) {
+      planetName.textContent = 'SOLAR SYSTEM';
+      planetMeta.textContent = 'Select a planet to focus it.';
+      return;
+    }
+    const p = planets[selectedPlanet];
+    planetName.textContent = p.name.toUpperCase();
+    planetMeta.textContent = `${p.class} · ${p.au.toFixed(3)} AU · ${p.period.toFixed(3)} Earth-year orbit`;
+  }
+
+  renderPlanetButtons();
+
+  const stages = [
+    { max: 0.39, badge: 'EXTERIOR', label: 'Schwarzschild exterior' },
+    { max: 0.49, badge: 'STRONG FIELD', label: 'strong-field approach' },
+    { max: 0.56, badge: 'BOUNDARY', label: 'epistemic boundary' },
+    { max: 0.80, badge: 'THROAT', label: 'speculative three-fold manifold corridor' },
+    { max: 0.90, badge: 'PHOTOSPHERE', label: 'procedural stellar breakthrough' },
+    { max: 1.01, badge: 'SYSTEM', label: 'navigable solar system' }
+  ];
+
+  function updateStageUI() {
+    const t = Number(travel.value) / 1000;
+    const stage = stages.find(s => t < s.max) || stages[stages.length - 1];
+    stageBadge.textContent = stage.badge;
+    transitLabel.textContent = `${t.toFixed(3)} — ${stage.label}`;
+    orbitPanel.classList.toggle('active', t >= 0.88);
+    galacticMap.style.display = showGalactic.checked ? 'grid' : 'none';
+    safeStorage.set('throat.travel', travel.value);
+
+    const inBoundary = t >= 0.49 && t <= 0.56;
+    boundaryNotice.classList.toggle('visible', inBoundary);
+    if (inBoundary && !lastBoundaryFlash && navigator.vibrate) {
+      try { navigator.vibrate(18); } catch {}
+    }
+    lastBoundaryFlash = inBoundary;
+  }
+
+  travel.addEventListener('input', updateStageUI);
+  orbitTime.addEventListener('input', () => {});
+  systemScale.addEventListener('input', () => {});
+  showOrbits.addEventListener('change', () => {});
+  showGalactic.addEventListener('change', updateStageUI);
+  qsa('[data-travel]').forEach(button => button.addEventListener('click', () => {
+    travel.value = button.dataset.travel;
+    updateStageUI();
+  }));
+
+  motionToggle.addEventListener('click', () => {
+    isPaused = !isPaused;
+    motionToggle.textContent = isPaused ? 'RESUME MOTION' : 'PAUSE MOTION';
+  });
+  resetView.addEventListener('click', () => {
+    viewYaw = 0.12;
+    viewTilt = 0.74;
+    selectedPlanet = -1;
+    targetFocus = 0;
+    updatePlanetReadout();
+    renderPlanetButtons();
+  });
+
+  canvas.addEventListener('pointerdown', (event) => {
+    pointerDown = true;
+    lastPointer = { x: event.clientX, y: event.clientY };
+    canvas.setPointerCapture?.(event.pointerId);
+  });
+  canvas.addEventListener('pointermove', (event) => {
+    if (!pointerDown) return;
+    const dx = event.clientX - lastPointer.x;
+    const dy = event.clientY - lastPointer.y;
+    lastPointer = { x: event.clientX, y: event.clientY };
+    viewYaw += dx * 0.004;
+    viewTilt = clamp(viewTilt - dy * 0.003, 0.26, 1.0);
+  });
+  const releasePointer = (event) => {
+    pointerDown = false;
+    try { canvas.releasePointerCapture?.(event.pointerId); } catch {}
+  };
+  canvas.addEventListener('pointerup', releasePointer);
+  canvas.addEventListener('pointercancel', releasePointer);
+
+  window.addEventListener('keydown', (event) => {
+    if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement?.tagName || '')) return;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+      event.preventDefault();
+      const delta = event.key === 'ArrowRight' ? 20 : -20;
+      travel.value = String(clamp(Number(travel.value) + delta, 0, 1000));
+      updateStageUI();
+    } else if (event.code === 'Space') {
+      event.preventDefault();
+      motionToggle.click();
+    } else if (event.key === 'Escape') {
+      libraryPanel.classList.remove('open');
+      researchHud.classList.remove('mobile-visible');
+    }
+  });
+
+  selectTheory(activeTheory);
+  updateStageUI();
+  motionToggle.textContent = isPaused ? 'RESUME MOTION' : 'PAUSE MOTION';
+
+  // ---------- WebGL renderer ----------
+  const gl = canvas.getContext('webgl2', {
+    antialias: false,
+    alpha: false,
+    powerPreference: 'high-performance',
+    preserveDrawingBuffer: false
+  });
+
+  if (!gl) {
+    runtimeBadge.textContent = 'WEBGL2 UNAVAILABLE';
+    runtimeBadge.style.color = 'var(--danger)';
+    fallbackMessage.hidden = false;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const drawFallback = () => {
+        canvas.width = Math.max(1, innerWidth * Math.min(devicePixelRatio || 1, 1.5));
+        canvas.height = Math.max(1, innerHeight * Math.min(devicePixelRatio || 1, 1.5));
+        const g = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, 5, canvas.width / 2, canvas.height / 2, canvas.width * .55);
+        g.addColorStop(0, '#000');
+        g.addColorStop(.28, '#120d19');
+        g.addColorStop(.62, '#061321');
+        g.addColorStop(1, '#020308');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      };
+      drawFallback();
+      addEventListener('resize', drawFallback);
+    }
+    return;
+  }
+
+  const vert = `#version 300 es
+  precision highp float;
+  in vec2 a_position;
+  void main(){ gl_Position = vec4(a_position, 0.0, 1.0); }`;
+
+  const frag = `#version 300 es
+  precision highp float;
+  out vec4 outColor;
+
+  uniform vec2 u_resolution;
+  uniform float u_time;
+  uniform float u_travel;
+  uniform float u_orbitTime;
+  uniform float u_systemScale;
+  uniform float u_yaw;
+  uniform float u_tilt;
+  uniform float u_focus;
+  uniform int u_selected;
+  uniform int u_showOrbits;
+
+  const float PI = 3.141592653589793;
+  const float M = 0.5;          // normalized Schwarzschild: r_s = 1, M = 1/2
+  const float BCRIT = 2.598076; // 1.5 * sqrt(3) * r_s
+
+  float hash21(vec2 p){
+    p = fract(p * vec2(123.34, 456.21));
+    p += dot(p, p + 45.32);
+    return fract(p.x * p.y);
+  }
+
+  float noise2(vec2 p){
+    vec2 i = floor(p), f = fract(p);
+    f = f*f*(3.0-2.0*f);
+    float a = hash21(i);
+    float b = hash21(i+vec2(1,0));
+    float c = hash21(i+vec2(0,1));
+    float d = hash21(i+vec2(1,1));
+    return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);
+  }
+
+  vec3 starField(vec2 p, float twist){
+    vec2 q = p;
+    float r = length(q);
+    float a = atan(q.y,q.x) + twist;
+    q = vec2(cos(a), sin(a)) * r;
+    vec2 g = floor(q * 80.0);
+    float h = hash21(g);
+    float star = smoothstep(0.992, 1.0, h) * pow(1.0 - length(fract(q*80.0)-0.5)*2.0, 8.0);
+    float dust = pow(max(0.0, 1.0-abs(q.y*0.9 + 0.13*sin(q.x*8.0))), 8.0) * 0.12;
+    return vec3(star) + dust * vec3(0.34,0.49,0.8);
+  }
+
+  // Prototype geodesic probe. It integrates the Schwarzschild Binet ODE
+  // u'' + u = 3 M u^2 using RK4. It is used for capture/deflection cues,
+  // but this prototype does NOT yet implement the full v3 multi-crossing disk sampler.
+  vec3 geodesicProbe(float b){
+    float u = 0.0005;
+    float v = 1.0 / max(b, 0.001);
+    float phi = 0.0;
+    float minR = 999.0;
+    float escaped = 0.0;
+    float captured = 0.0;
+    float h = 0.045;
+    for(int i=0;i<88;i++){
+      float r = 1.0 / max(u, 0.00001);
+      minR = min(minR, r);
+      if(u >= 1.0){ captured = 1.0; break; }
+      if(i > 10 && u < 0.001 && v < 0.0){ escaped = 1.0; break; }
+
+      float k1u = v;
+      float k1v = -u + 3.0*M*u*u;
+
+      float u2 = u + 0.5*h*k1u;
+      float v2 = v + 0.5*h*k1v;
+      float k2u = v2;
+      float k2v = -u2 + 3.0*M*u2*u2;
+
+      float u3 = u + 0.5*h*k2u;
+      float v3 = v + 0.5*h*k2v;
+      float k3u = v3;
+      float k3v = -u3 + 3.0*M*u3*u3;
+
+      float u4 = u + h*k3u;
+      float v4 = v + h*k3v;
+      float k4u = v4;
+      float k4v = -u4 + 3.0*M*u4*u4;
+
+      u += h*(k1u + 2.0*k2u + 2.0*k3u + k4u)/6.0;
+      v += h*(k1v + 2.0*k2v + 2.0*k3v + k4v)/6.0;
+      phi += h;
+    }
+    float deflect = max(0.0, phi - PI);
+    if(escaped < 0.5 && captured < 0.5 && b < BCRIT) captured = 1.0;
+    return vec3(captured, deflect, minR);
+  }
+
+  vec3 blackHoleStage(vec2 p){
+    float r = length(p);
+    float a = atan(p.y,p.x);
+    float b = 1.02 + r * 6.5;
+    vec3 geo = geodesicProbe(b);
+    float captured = geo.x;
+    float deflect = geo.y;
+    float minR = geo.z;
+
+    float bend = clamp(deflect * 0.19, 0.0, 1.35);
+    vec2 q = vec2(cos(a + bend), sin(a + bend)) * (r + bend*0.055);
+    vec3 col = starField(q * 1.25, bend*0.75 + u_yaw*0.25);
+
+    // Procedural disk presentation. It is intentionally marked in docs as a
+    // presentation layer until the full multi-crossing sampler is transplanted.
+    float diskY = abs(p.y * (1.0 + 2.4*r) + 0.055*sin(a*4.0 + u_time*0.65));
+    float diskBand = (1.0-smoothstep(0.012,0.09,diskY)) * smoothstep(0.18,0.32,r) * (1.0-smoothstep(1.05,1.5,r));
+    float hot = pow(clamp(1.2-r,0.0,1.0), 2.1);
+    float turbulence = 0.65 + 0.35*noise2(vec2(a*4.0, r*11.0-u_time*0.2));
+    vec3 disk = mix(vec3(0.55,0.08,0.015), vec3(1.0,0.82,0.34), hot) * diskBand * turbulence * (1.0 + 0.35*bend);
+    col += disk;
+
+    float nearCritical = exp(-8.0*abs(b-BCRIT));
+    col += nearCritical * vec3(0.09,0.08,0.06) * (captured < 0.5 ? 1.0 : 0.0);
+
+    if(captured > 0.5) col *= 0.015;
+    float horizonEdge = (1.0-smoothstep(0.0,0.018,abs(r-0.245)));
+    col += horizonEdge * vec3(0.04,0.05,0.07);
+
+    float vignette = (1.0-smoothstep(0.35,1.45,r));
+    col *= 0.65 + 0.35*vignette;
+    return col;
+  }
+
+  vec3 throatStage(vec2 p, float localT){
+    float r = length(p);
+    float a = atan(p.y,p.x);
+    float petal = 0.16*sin(3.0*a + u_time*0.45) + 0.055*sin(6.0*a-u_time*0.2);
+    float tunnelR = r * (1.0 + petal);
+    float z = 1.0 / max(0.045, tunnelR);
+    float ribs = 0.5 + 0.5*sin(z*7.5 - u_time*2.4 + 3.0*a);
+    float filaments = pow(0.5+0.5*sin(z*2.3 + 12.0*a - u_time), 6.0);
+    float core = exp(-7.0*r);
+    vec3 c1 = vec3(0.10,0.50,0.86);
+    vec3 c2 = vec3(0.82,0.12,0.43);
+    vec3 c3 = vec3(0.95,0.70,0.22);
+    vec3 col = mix(c1,c2,0.5+0.5*sin(a*3.0+localT*4.0));
+    col = mix(col,c3,filaments*0.55);
+    col *= (0.15 + 0.85*ribs) * (0.35 + 1.2*core);
+    col += starField(p*2.5, z*0.02) * (0.12 + 0.35*(1.0-localT));
+    return col;
+  }
+
+  vec3 starBreakthrough(vec2 p, float localT){
+    float r = length(p);
+    float surface = (1.0-smoothstep(0.53,0.58,r));
+    float edge = (1.0-smoothstep(0.0,0.07,abs(r-0.55)));
+    float gran = noise2(p*26.0 + vec2(u_time*0.15,-u_time*0.1));
+    vec3 sun = mix(vec3(1.0,0.22,0.02),vec3(1.0,0.94,0.56),0.65+0.35*gran);
+    vec3 bg = starField(p*1.7, u_yaw*0.2);
+    vec3 col = mix(bg, sun*(1.0+1.3*edge), surface);
+    float flash = exp(-15.0*abs(localT-0.58)) * exp(-2.0*r);
+    col += flash*vec3(1.0,0.95,0.78)*2.2;
+    return col;
+  }
+
+  float orbitRadius(int i){
+    if(i==0) return 0.20;
+    if(i==1) return 0.26;
+    if(i==2) return 0.31;
+    if(i==3) return 0.37;
+    if(i==4) return 0.52;
+    if(i==5) return 0.63;
+    if(i==6) return 0.76;
+    return 0.87;
+  }
+
+  float orbitPeriod(int i){
+    if(i==0) return 0.241;
+    if(i==1) return 0.615;
+    if(i==2) return 1.0;
+    if(i==3) return 1.881;
+    if(i==4) return 11.862;
+    if(i==5) return 29.457;
+    if(i==6) return 84.017;
+    return 164.79;
+  }
+
+  vec3 planetColor(int i){
+    if(i==0) return vec3(0.67,0.63,0.58);
+    if(i==1) return vec3(0.90,0.72,0.35);
+    if(i==2) return vec3(0.20,0.48,0.95);
+    if(i==3) return vec3(0.88,0.28,0.13);
