@@ -1,0 +1,67 @@
+{
+  "schema": "lokivelli.research_forge.services.v1",
+  "services": [
+    {
+      "id": "generator-forge",
+      "label": "Generator Forge",
+      "kind": "external-paired",
+      "host": "127.0.0.1",
+      "port": 8795,
+      "health_url": "http://127.0.0.1:8795/api/health",
+      "required_for": [
+        "titans-live-routing"
+      ],
+      "authority": "provider-broker"
+    },
+    {
+      "id": "solar-lab",
+      "label": "InChordMe Solar Lab",
+      "kind": "external-paired",
+      "host": "127.0.0.1",
+      "port": 8800,
+      "health_url": "http://127.0.0.1:8800/",
+      "required_for": [],
+      "authority": "simulation-donor"
+    },
+    {
+      "id": "ttf-pmae",
+      "label": "TTF/PMAE",
+      "kind": "external-paired",
+      "host": "127.0.0.1",
+      "port": 5000,
+      "health_url": "http://127.0.0.1:5000/",
+      "required_for": [],
+      "authority": "neighboring-audit"
+    },
+    {
+      "id": "mclab",
+      "label": "MCLAB Federated",
+      "kind": "external-paired",
+      "host": "127.0.0.1",
+      "port": 8081,
+      "health_url": "http://127.0.0.1:8081/",
+      "required_for": [],
+      "authority": "federated-donor"
+    },
+    {
+      "id": "playground",
+      "label": "Physicist Playground",
+      "kind": "external-paired",
+      "host": "127.0.0.1",
+      "port": 8890,
+      "health_url": "http://127.0.0.1:8890/",
+      "required_for": [],
+      "authority": "experiment-donor"
+    },
+    {
+      "id": "research-forge",
+      "label": "Research Forge Front Door",
+      "kind": "native",
+      "host": "127.0.0.1",
+      "port": 8877,
+      "health_url": "http://127.0.0.1:8877/api/status",
+      "required_for": [],
+      "authority": "federation-shell"
+    }
+  ]
+}
