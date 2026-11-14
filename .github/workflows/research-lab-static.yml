@@ -7,40 +7,52 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Static contract checks
+
+      - name: Cross-stack regression fixtures
         run: |
-          test -s index.html
-          test -s apps/throat/index.html
-          test -s apps/throat-extreme/index.html
-          test -s research/bulk_interference_v02/WORKBENCH.html
-          test -s research/bulk_interference_v02/DERIVATION_LEDGER.md
-          test -s research/bulk_interference_v02/MATRIX_TENSOR_ATTACK.md
-          test -s federation/DONOR_REGISTER.md
-          test -s deep-research/NEXT_RUN_BRIEF.md
-          test -s zenodo/ZENODO_RELEASE_CHECKLIST.md
-          grep -q "GARGANTUA / THROAT" apps/throat/index.html
-          grep -q "OPEN_A05_WALL" research/bulk_interference_v02/DERIVATION_LEDGER.md || true
-          grep -q "1/(6π)" research/bulk_interference_v02/DERIVATION_LEDGER.md
-          grep -q "1/(3π)" research/bulk_interference_v02/DERIVATION_LEDGER.md
-      - name: Serve running build
+          python3 scripts/regression_fixtures.py
+          python3 scripts/secret_boundary.py
+
+      - name: Launch actual Research Forge front door
         run: |
-          python3 -m http.server 8765 >/tmp/research-lab-http.log 2>&1 &
-          echo $! > /tmp/research-lab-http.pid
-          for i in $(seq 1 20); do
-            curl -fsS http://127.0.0.1:8765/ >/tmp/root.html && break
-            sleep 1
-          done
-          curl -fsS http://127.0.0.1:8765/apps/throat/index.html >/tmp/throat.html
-          curl -fsS http://127.0.0.1:8765/apps/throat-extreme/index.html >/tmp/extreme.html
-          curl -fsS http://127.0.0.1:8765/research/bulk_interference_v02/WORKBENCH.html >/tmp/workbench.html
+          bash run.sh
+          curl -fsS http://127.0.0.1:8877/api/status > /tmp/status.json
+          curl -fsS http://127.0.0.1:8877/api/titans > /tmp/titans.json
+          python3 - <<'PY'
+          import json
+          status=json.load(open('/tmp/status.json'))
+          titans=json.load(open('/tmp/titans.json'))
+          assert status['service']=='lokivelli-research-forge'
+          assert status['keyless_public_mode'] is True
+          assert len(titans['seats']) == 4
+          assert [s['id'] for s in titans['seats'][:3]] == ['titan-1','titan-2','titan-3']
+          print('RUNTIME CONTRACT PASS')
+          PY
+
+      - name: Static donor surface regression
+        run: |
+          curl -fsS http://127.0.0.1:8877/ >/tmp/root.html
+          curl -fsS http://127.0.0.1:8877/apps/throat/index.html >/tmp/throat.html
+          curl -fsS http://127.0.0.1:8877/apps/throat-extreme/index.html >/tmp/extreme.html
+          curl -fsS http://127.0.0.1:8877/research/bulk_interference_v02/WORKBENCH.html >/tmp/workbench.html
           grep -q "FEDERATED COMMAND DECK" /tmp/root.html
           grep -q "GARGANTUA / THROAT TRANSIT" /tmp/throat.html
           grep -q "Bulk Interference / Throat Coupling v0.2" /tmp/workbench.html
-      - name: Receipt
+          grep -q "1/(6π)" research/bulk_interference_v02/DERIVATION_LEDGER.md
+          grep -q "1/(3π)" research/bulk_interference_v02/DERIVATION_LEDGER.md
+
+      - name: Public package + receipts
         run: |
-          sha256sum index.html apps/throat/index.html apps/throat-extreme/index.html research/bulk_interference_v02/WORKBENCH.html research/bulk_interference_v02/DERIVATION_LEDGER.md > BUILD_RECEIPT.sha256
+          python3 scripts/package_public_release.py
+          sha256sum             index.html             apps/throat/index.html             apps/throat-extreme/index.html             research/bulk_interference_v02/WORKBENCH.html             research/bulk_interference_v02/DERIVATION_LEDGER.md             config/services.json             config/titans.public.json             forge_server.py             verify.sh             > BUILD_RECEIPT.sha256
           cat BUILD_RECEIPT.sha256
-      - uses: actions/upload-artifact@v4
+
+      - name: Upload build receipts and installable public package
+        uses: actions/upload-artifact@v4
         with:
-          name: research-lab-build-receipt
-          path: BUILD_RECEIPT.sha256
+          name: research-lab-public-build
+          path: |
+            BUILD_RECEIPT.sha256
+            dist/Lokivelli_Research_Forge_PUBLIC_0.2.0_20261114.zip
+            dist/Lokivelli_Research_Forge_PUBLIC_0.2.0_20261114.zip.sha256
+            dist/Lokivelli_Research_Forge_PUBLIC_0.2.0_20261114.SHA256_MANIFEST.json
