@@ -1,0 +1,46 @@
+{
+  "schema": "lokivelli.research_lab.donor_manifest.v1",
+  "generated_date": "2026-11-14",
+  "donors": [
+    {
+      "repository": "lokivelli316/grok15k",
+      "visibility": "private",
+      "ref": "main",
+      "commit": "56e305f232216059fb4fc20323e108ce83142579",
+      "role": [
+        "application shell",
+        "control/PRIMA lineage",
+        "Three.js-capable runtime",
+        "UI/build QA patterns"
+      ],
+      "import_policy": "federated-inspect-before-transplant"
+    },
+    {
+      "repository": "lokivelli316/15klabrun2",
+      "visibility": "private",
+      "ref": "main",
+      "commit": "d1a55944b345bb516946fb1636da7f4dfac1e1bc",
+      "role": [
+        "provenance",
+        "dependency graph",
+        "kill engine",
+        "sensitivity/Jacobian",
+        "hash receipts",
+        "Pressure Mode",
+        "dual inference",
+        "scientific status discipline"
+      ],
+      "import_policy": "federated-pattern-donor"
+    },
+    {
+      "repository": "lokivelli316/millennialdragonball",
+      "visibility": "private",
+      "ref": "bulk-interference-throat-v0.2",
+      "role": [
+        "external adversarial WAR engine"
+      ],
+      "import_policy": "external-federation-no-absorption"
+    }
+  ],
+  "rule": "No donor mechanism is scientific authority merely because it is implemented or reused. Preserve origin, status, and failure ledger."
+}
