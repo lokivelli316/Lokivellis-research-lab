@@ -1,0 +1,41 @@
+{
+  "schema": "lokivelli.research_forge.titans.public.v1",
+  "mode": "PUBLIC_KEYLESS",
+  "scientific_authority": "deterministic-laboratory-only",
+  "seats": [
+    {
+      "id": "titan-1",
+      "role": "Supervisor / Strategist",
+      "provider_binding": "LOCAL_PRIVATE_CONFIGURATION_REQUIRED",
+      "direct_state_mutation": false
+    },
+    {
+      "id": "titan-2",
+      "role": "Explorer / Mutator",
+      "provider_binding": "LOCAL_PRIVATE_CONFIGURATION_REQUIRED",
+      "direct_state_mutation": false
+    },
+    {
+      "id": "titan-3",
+      "role": "Adversarial Validator",
+      "provider_binding": "LOCAL_PRIVATE_CONFIGURATION_REQUIRED",
+      "direct_state_mutation": false
+    },
+    {
+      "id": "math-seat",
+      "role": "Dedicated Formal Math Check",
+      "provider_binding": "OPERATOR_SELECTED_RUNTIME_MODEL",
+      "direct_state_mutation": false
+    }
+  ],
+  "generator_pair": {
+    "service": "Generator Forge",
+    "default_url": "http://127.0.0.1:8795",
+    "credentials_in_repo": false
+  },
+  "proposal_contract": {
+    "structured_output_required": true,
+    "deterministic_validation_required": true,
+    "receipts_required": true
+  }
+}
