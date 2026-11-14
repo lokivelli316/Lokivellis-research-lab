@@ -1,0 +1,29 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "name": "Lokivelli's Research Lab",
+  "version": "0.2.0-research-hold",
+  "dateModified": "2026-11-14",
+  "codeRepository": "https://github.com/lokivelli316/Lokivellis-research-lab",
+  "programmingLanguage": [
+    "HTML",
+    "JavaScript",
+    "Python"
+  ],
+  "description": "Federated research software for derivation, adversarial testing, visualization, provenance and reproducible packaging of the Bulk Interference / Throat Coupling v0.2 research program.",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "CREATOR NAME — HOLD FOR OPERATOR CONFIRMATION"
+    }
+  ],
+  "keywords": [
+    "physics",
+    "scientific software",
+    "falsification",
+    "provenance",
+    "bulk interference",
+    "throat coupling",
+    "emergent gravity"
+  ]
+}
