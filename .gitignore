@@ -1,0 +1,12 @@
+runtime/
+.env
+.env.*
+!.env.example
+local/
+private/
+*.key
+*.pem
+*.token
+workspace/logs/
+workspace/pids/
+workspace/exports/private/
