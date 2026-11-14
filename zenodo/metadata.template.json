@@ -1,0 +1,27 @@
+{
+  "title": "Lokivelli's Research Lab — Bulk Interference / Throat Coupling v0.2",
+  "upload_type": "software",
+  "description": "HOLD: replace with frozen release abstract after derivation and Deep Research gates.",
+  "creators": [
+    {
+      "name": "CREATOR NAME — HOLD FOR OPERATOR CONFIRMATION"
+    }
+  ],
+  "keywords": [
+    "physics",
+    "scientific software",
+    "falsification",
+    "provenance",
+    "bulk interference",
+    "throat coupling",
+    "emergent gravity"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/lokivelli316/Lokivellis-research-lab",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "RESEARCH HOLD. Creator identity, ORCID, affiliation, license and final release version require operator confirmation before this template becomes root .zenodo.json."
+}
