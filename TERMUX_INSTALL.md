@@ -37,3 +37,28 @@ VERIFY PASS: integrated shell + donor validations
 ```
 
 on the phone.
+
+
+## Local credential import after installation
+
+The public repository remains keyless. After installation, import credentials from explicit local files or scan roots into the gitignored local `.env`:
+
+```bash
+python3 scripts/configure_local_secrets.py /path/to/your/provider.env
+```
+
+or, if your existing key files are spread through a private local workspace:
+
+```bash
+python3 scripts/configure_local_secrets.py --scan-root "$HOME/your-private-key-folder"
+```
+
+The importer:
+
+- accepts only the supported provider variable names;
+- never prints credential values;
+- preserves an already-configured local value over an imported duplicate;
+- writes only the repository-local gitignored `.env`;
+- enforces mode `600`.
+
+This prepares the local/private runtime. Generator Forge and other paired services retain their own credential boundaries; this does not rewrite their existing configuration.
