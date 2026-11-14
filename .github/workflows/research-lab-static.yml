@@ -1,0 +1,46 @@
+name: research-lab-static-receipt
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Static contract checks
+        run: |
+          test -s index.html
+          test -s apps/throat/index.html
+          test -s apps/throat-extreme/index.html
+          test -s research/bulk_interference_v02/WORKBENCH.html
+          test -s research/bulk_interference_v02/DERIVATION_LEDGER.md
+          test -s research/bulk_interference_v02/MATRIX_TENSOR_ATTACK.md
+          test -s federation/DONOR_REGISTER.md
+          test -s deep-research/NEXT_RUN_BRIEF.md
+          test -s zenodo/ZENODO_RELEASE_CHECKLIST.md
+          grep -q "GARGANTUA / THROAT" apps/throat/index.html
+          grep -q "OPEN_A05_WALL" research/bulk_interference_v02/DERIVATION_LEDGER.md || true
+          grep -q "1/(6π)" research/bulk_interference_v02/DERIVATION_LEDGER.md
+          grep -q "1/(3π)" research/bulk_interference_v02/DERIVATION_LEDGER.md
+      - name: Serve running build
+        run: |
+          python3 -m http.server 8765 >/tmp/research-lab-http.log 2>&1 &
+          echo $! > /tmp/research-lab-http.pid
+          for i in $(seq 1 20); do
+            curl -fsS http://127.0.0.1:8765/ >/tmp/root.html && break
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:8765/apps/throat/index.html >/tmp/throat.html
+          curl -fsS http://127.0.0.1:8765/apps/throat-extreme/index.html >/tmp/extreme.html
+          curl -fsS http://127.0.0.1:8765/research/bulk_interference_v02/WORKBENCH.html >/tmp/workbench.html
+          grep -q "FEDERATED COMMAND DECK" /tmp/root.html
+          grep -q "GARGANTUA / THROAT TRANSIT" /tmp/throat.html
+          grep -q "Bulk Interference / Throat Coupling v0.2" /tmp/workbench.html
+      - name: Receipt
+        run: |
+          sha256sum index.html apps/throat/index.html apps/throat-extreme/index.html research/bulk_interference_v02/WORKBENCH.html research/bulk_interference_v02/DERIVATION_LEDGER.md > BUILD_RECEIPT.sha256
+          cat BUILD_RECEIPT.sha256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: research-lab-build-receipt
+          path: BUILD_RECEIPT.sha256
