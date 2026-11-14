@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this research software, cite the archived release identified in the release metadata."
+title: "Lokivelli's Research Lab"
+type: software
+version: "0.2.0-research-hold"
+date-released: "2026-11-14"
+authors:
+  - name: "CREATOR NAME — HOLD FOR OPERATOR CONFIRMATION"
+repository-code: "https://github.com/lokivelli316/Lokivellis-research-lab"
+abstract: >-
+  Federated research software for derivation, adversarial testing, visualization,
+  provenance, and reproducible packaging of the Bulk Interference / Throat Coupling
+  v0.2 research program and related SME, CUT, PMAE and emergent-equivalency work.
+keywords:
+  - physics
+  - scientific software
+  - falsification
+  - provenance
+  - bulk interference
+  - throat coupling
+  - emergent gravity
