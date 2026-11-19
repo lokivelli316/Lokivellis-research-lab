@@ -36,3 +36,28 @@ Then open `http://127.0.0.1:8765/`.
 ## Status
 
 **HOLD — research build, not scientific validation.** The repository is launchable, but the v0.2 derivation repair and external adversarial research must precede observational promotion and Zenodo publication.
+
+## Continuous causal / correlation adversarial layer
+
+The active v0.2 program now carries a mandatory additive matrix layer at:
+
+- `research/bulk_interference_v02/CAUSAL_CORRELATION_ADVERSARIAL_MATRIX.md`
+
+It does **not** replace D1–D10, the four primary T/O/P/N tensors, ordinary astrophysics, bulk hypotheses or null models. It forces every positive-looking fit to travel with its negative mirror and strongest surviving alternatives.
+
+Every observational lane must retain, where applicable:
+
+- ordinary 3+1 physics;
+- bulk-only contribution;
+- ordinary + bulk additive contribution;
+- ordinary × bulk interaction / receiver susceptibility;
+- common-cause explanations;
+- selection, cadence, measurement and pipeline systematics;
+- coincidence;
+- TP / FP / FN / TN accounting;
+- positive-twin and negative-twin searches;
+- nearest false-positive and nearest false-negative searches;
+- blind population ranking before labels are revealed;
+- prospective versus post-hoc separation.
+
+A strong fit is therefore a coordinate, not a verdict. **Who else fits, who should fit but does not, and who should not fit but does** are mandatory questions throughout the pipeline.
