@@ -126,3 +126,100 @@ Kill:
 No 2026 event correlation may select coefficients.
 
 Only after D1–D9 are resolved enough to produce a frozen mathematical candidate does the observational test unlock.
+
+## D11 — continuous causal / correlation / negative-space attack
+
+This is additive to D1–D10 and applies continuously to every derivation, simulation, event intake, observational correlation, interpretation and promotion decision.
+
+Canonical matrix:
+- `CAUSAL_CORRELATION_ADVERSARIAL_MATRIX.md`
+
+Mandatory separations:
+
+```text
+correlation != temporal order != propagation != convergence/interference
+            != coupling != trigger/susceptibility != mechanism != causation
+```
+
+Parallel lanes must remain alive until specifically killed:
+
+```text
+H0  ordinary astrophysics + coincidence/systematics
+H1  ordinary 3+1 propagation
+H2  bulk interference + throat coupling
+H3  ordinary + bulk additive
+H4  ordinary × bulk interaction / receiver susceptibility
+HCC common cause
+HS  selection / measurement / cadence / pipeline systematic
+HA  linear bulk interference
+HB  geometric focusing / caustics
+HC  nonlinear buildup + throat discharge/backfire
+```
+
+Every positive fit must simultaneously ask:
+- who else fits?
+- who fits better?
+- who should fit but does not?
+- who should not fit but does?
+- what is the nearest false positive?
+- what is the nearest false negative?
+- what happens when the condition is inverted?
+- what happens under time, sky, phase and receiver permutations?
+- what common cause can generate both sides?
+- what ordinary mechanism reproduces the same observable?
+- if labels are hidden, where does the target rank under the frozen model?
+- what denominator/base rate is being ignored?
+- what assumption has been silently accepted?
+- what the hell did we not ask that we should have asked already?
+
+Required 2×2 accounting whenever the data permit:
+
+```text
+                  EVENT E      NO EVENT ¬E
+PREDICTED Ψ          TP            FP
+NOT PREDICTED ¬Ψ     FN            TN
+```
+
+Do not confuse:
+
+```text
+P(Ψ | E)  with  P(E | Ψ)
+```
+
+Required ablations extend D1–D10 rather than replacing them:
+
+```text
+bulk off
+3+1 off
+throat off
+interference off
+receiver-susceptibility off
+micro layer off
+history dependence off
+phase information off
+```
+
+A component receives causal credit only if its removal degrades a frozen prediction in the specifically predicted way.
+
+The evidence state is a vector, not one label. Track independently:
+
+```text
+DERIVATION
+PROPAGATION
+CONVERGENCE / INTERFERENCE
+COUPLING
+RECEIVER SUSCEPTIBILITY
+CORRELATION
+TEMPORAL ORDER
+MECHANISM
+COMMON-CAUSE CLEARANCE
+NEGATIVE-CONTROL SURVIVAL
+FALSE-POSITIVE CONTROL
+FALSE-NEGATIVE CONTROL
+BLIND-RANK PERFORMANCE
+CAUSAL DISCRIMINATION
+PROSPECTIVE STATUS
+REPLICATION
+```
+
+One strong coordinate cannot promote the full vector.
