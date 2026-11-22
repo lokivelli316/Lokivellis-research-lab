@@ -5,7 +5,7 @@ type: software
 version: "0.2.0-research-hold"
 date-released: "2026-11-14"
 authors:
-  - name: "CREATOR NAME — HOLD FOR OPERATOR CONFIRMATION"
+  - name: "Robert Michael Earlywine-Lucas aka Lokivelli"
 repository-code: "https://github.com/lokivelli316/Lokivellis-research-lab"
 abstract: >-
   Federated research software for derivation, adversarial testing, visualization,
